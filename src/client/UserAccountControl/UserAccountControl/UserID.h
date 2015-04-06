@@ -6,10 +6,10 @@
 using namespace web::json;
 using namespace utility;
 
-class UserAccount {
+class UserID {
 public:
-	UserAccount ();
-	~UserAccount ();
+  UserID();
+  ~UserID();
 
 	void InputUserInfo (string_t input_id, string_t input_pw);
 	string_t serialize (void);
