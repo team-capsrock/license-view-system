@@ -13,6 +13,16 @@ using namespace utility;
 
 class HttpSocket {
 public:
+  HttpSocket() {}
+  HttpSocket(string_t conn_dns) { 
+    uri_builder conn_uri;
+    conn_uri.set_host(conn_dns);
+    conn_uri.set_port(80);
+
+    client_ = new http_client(conn_uri.to_uri()); 
+  }
+  ~HttpSocket() { delete client_; }
+
   //Accessor for inbuf and outbuf
   string_t get_outbuf() { return outbuf_; }
   void set_inbuf(string_t input) { inbuf_ = input; }
@@ -21,31 +31,11 @@ public:
    *						and receive program definition.)
    * You must set _inbuf before use this function.
    */
-  bool httpRequset(void);
+  pplx::task<void> httpRequset(string_t req_uri);
 
 private:
   string_t inbuf_, outbuf_;
   http_client *client_;
-
-public:
-  inline static HttpSocket* getInstance(string_t conn_uri) {
-    if (instance == nullptr) {
-      instance = new HttpSocket;
-
-      uri conn(conn_uri);
-      
-      instance->client_ = new http_client(conn);
-    }
-
-    return instance;
-  }
-
-protected:
-  HttpClient() {}
-  ~HttpClient() {}
-
-private:
-  static HttpClient *instance;
 };
 
 #endif

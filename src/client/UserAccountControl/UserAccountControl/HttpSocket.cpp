@@ -1,17 +1,20 @@
 #include "HttpSocket.h"
 
-bool HttpSocket::httpRequset(void) {
+pplx::task<void> HttpSocket::httpRequset(string_t req_uri) {
   http_request req;
 
-  uri req_uri(L"/user/account.html");
-  req.set_method(methods::POST);
-  req.set_request_uri(req_uri);
+  uri_builder req_path;
+  req_path.set_path(req_uri);
+
+  req.set_method(methods::GET);
+  req.set_request_uri(req_path.to_uri());
   req.set_body(inbuf_);
 
-  client_->request(req).then([&](http_response response) {
+  return client_->request(req).then([&](http_response response) {
+    std::cout << response.status_code() << " OK" << std::endl;
     if (response.status_code() == 200) {
-      response.extract_json().then([&](web::json::value json_val) {
-        outbuf_ = json_val.to_string();
+      response.extract_string().then([&](string_t http_body) {
+        outbuf_ = http_body;
       });
     }
   });
