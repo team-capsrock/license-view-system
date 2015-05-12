@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<svg version = "1.1"
+     baseProfile="full"
+     xmlns = "http://www.w3.org/2000/svg"
+     xmlns:xlink = "http://www.w3.org/1999/xlink"
+     xmlns:ev = "http://www.w3.org/2001/xml-events">
+	<rect fill="#fff" x="0" y="0" width="100%" height="100%" />
+	<rect fill="#f4f4f4" x="0" y="0" width="100%" height="100%" rx="2px"/>
+</svg>
