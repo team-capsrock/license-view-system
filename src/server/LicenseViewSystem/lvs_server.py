@@ -7,6 +7,7 @@ from http.server import BaseHTTPRequestHandler
 import json
 import os
 import views
+import admin_views
 
 url_register = {
     '/' : views.index,
@@ -24,6 +25,13 @@ url_register = {
 #    '/admin/add_license/' : views.admin_add_license,
 }
 
+url_admin_register = {
+    '/admin/' : admin_views.index,
+    '/admin/login/' : admin_views.login,
+
+}
+
+
 class GetHandler(BaseHTTPRequestHandler) :
 
     def do_GET(self):
@@ -32,7 +40,7 @@ class GetHandler(BaseHTTPRequestHandler) :
         #req_path = self.path
 
         if req_path in url_register:
-            print('client access main page')
+
 
             func = url_register[req_path]
             html_doc = func()
@@ -41,6 +49,26 @@ class GetHandler(BaseHTTPRequestHandler) :
             self.end_headers()
             self.wfile.write(bytes(html_doc, encoding='utf8'))
             self.path = '/'
+
+        elif req_path in url_admin_register:
+
+            func = url_admin_register[req_path]
+            html_doc = func()
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(bytes(html_doc, encoding='utf8'))
+            self.path = '/'
+
+
+        elif req_path == '/test/':
+            self.send_response(200)
+            self.end_headers()
+            cwd = os.getcwd()+'\\test.html'
+            html_file = open(cwd, 'r', encoding='utf-8')
+            html_doc = html_file.read()
+            self.wfile.write(bytes(html_doc, encoding='utf8'))
+
+
         else:
             local_path = views.page_view(req_path)
             print(local_path)
@@ -55,6 +83,7 @@ class GetHandler(BaseHTTPRequestHandler) :
 
                 self.end_headers()
                 self.wfile.write(bytes(html_doc, encoding='utf8'))
+
             else:
                 self.send_response_only(404)
                 self.end_headers()
@@ -85,6 +114,19 @@ class GetHandler(BaseHTTPRequestHandler) :
             print(req_body)
 
             func = url_register[req_path]
+            html_doc = func(req_body)
+
+            self.path='/'
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(bytes(html_doc, 'utf-8'))
+        elif req_path in url_admin_register:
+
+            content_len = int(self.headers['Content-Length'])
+            req_body = self.rfile.read(content_len)
+            print(req_body)
+
+            func = url_admin_register[req_path]
             html_doc = func(req_body)
 
             self.path='/'

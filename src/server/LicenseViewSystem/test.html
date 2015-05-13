@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+
+		<script language="javascript">
+            var ajax_val = new XMLHttpRequest();
+
+			function clickevnt(){
+				ajax_val.open("GET", "http://127.0.0.1/test/", false);
+				ajax_val.send();
+
+				if ( ajax_val.status == 200){
+                    document.getElementById("text").innerHTML = ajax_val.responseText;
+                } else {
+                    document.getElementById("text").innerHTML = "response error";
+                }
+			}
+
+		</script>
+	</head>
+	<body>
+		<div id="text">Hello!!</div>
+		<button type="button" onclick="clickevnt()"> Click!! </button>
+	</body>
+</html>
